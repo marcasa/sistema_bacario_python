@@ -16,7 +16,7 @@ extrato = """
 ===============EXTRATO==============
 OPERAÇÃO ----- DATA ----- VALOR 
 """
-saldo = 5000.00
+saldo = 0.00
 qtd_saques = 0
 LIMITE_SAQUE_DIARIO = 500.00
 saque = 0.00
@@ -42,7 +42,10 @@ while True :
             
 
     elif opcao == "3" :
-        deposito = input("Valor do depósito: ")
+        deposito = float(input("Valor do depósito: "))
+        extrato += f"\n DEPÓSITO ----- {data_hoje.day}/{data_hoje.month}/{data_hoje.year} ----- R$ {deposito:.2f}"
+        saldo += deposito
+
     elif opcao == "4" :
         print("Saindo...")
         break
