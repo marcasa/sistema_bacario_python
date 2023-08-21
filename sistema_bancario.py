@@ -22,32 +22,66 @@ LIMITE_SAQUE_DIARIO = 500.00
 saque = 0.00
 data_hoje = date.today()
 
+def sacar(valor_saque, saldo ,qtd_saques, hoje):
+    hoje = date.today()
+    if qtd_saques < 3:
+        if valor_saque <=500.00 :
+            if valor_saque <= saldo :
+                saldo -= valor_saque
+                qtd_saques += 1
+                print("Saque efetuado com sucesso! Retire seu dinheiro")
+                extrato = f"\n SAQUE -------- {hoje.day}/{hoje.month}/{hoje.year} ------ R$ {valor_saque:.2f}"
+                return extrato, qtd_saques, saldo
+            else:
+                print("Saldo insuficiente para o valor desejado")
+        else:
+            print("Valor do saque deve ser menor que R$ 500.00")
+    else:
+        print("Quantidade de saques diários ultrapassado")
+
+
+def depositar(valor_deposito, hoje):
+    
+    extrato = f"\n DEPÓSITO ----- {hoje.day}/{hoje.month}/{hoje.year} ----- R$ {valor_deposito:.2f}"
+    print("Deposito realizado com sucesso")
+    return extrato, valor_deposito
+
+def gerar_extrato(saldo, hoje):
+    extrato = f"\n SALDO EM {hoje.day}/{hoje.month}/{hoje.year} R$ {saldo}"
+    return extrato
+
+
 while True :
     
     opcao = input(menu)
 
     if opcao == "1" :
-        extrato += f"\n SALDO EM {data_hoje.day}/{data_hoje.month}/{data_hoje.year} R$ {saldo}"
+        extrato_return = gerar_extrato(saldo=saldo, hoje=data_hoje)
         print(extrato)
+        print(extrato_return)
     elif opcao == "2" :
-        saque = float(input("Valor a ser sacado: "))
-        if qtd_saques < 3 and saque <= 500.00 and saque <= saldo :
-            saldo -= saque
-            qtd_saques += 1 
-            print("Saque efetuado com sucesso, retire seu dinheiro")
-            print(f"Saldo atual = {saldo}")
-            extrato += f"\n SAQUE ----- {data_hoje.day}/{data_hoje.month}/{data_hoje.year} ----- R$ {saque:.2f}"
-        else :
-            print("Erro ao efetuar o saque...")
             
-
+        saque = float(input("Valor a ser sacado: "))
+        sacar_return = sacar(valor_saque=saque, saldo=saldo, qtd_saques=qtd_saques, hoje = data_hoje)
+        if  sacar_return is not None:
+            extrato += sacar_return[0]
+            qtd_saques = sacar_return[1]
+            saldo = sacar_return[2]
+        
     elif opcao == "3" :
         deposito = float(input("Valor do depósito: "))
-        extrato += f"\n DEPÓSITO ----- {data_hoje.day}/{data_hoje.month}/{data_hoje.year} ----- R$ {deposito:.2f}"
-        saldo += deposito
+        deposito_return = depositar(valor_deposito=deposito, hoje=data_hoje )
+        extrato += deposito_return[0]
+        saldo += deposito_return[1]
+        
 
     elif opcao == "4" :
         print("Saindo...")
         break
     else :
         print("Opção inválida... ")
+
+
+
+
+
